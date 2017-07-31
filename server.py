@@ -4,9 +4,11 @@ import json
 from functools import reduce
 
 from flask import Flask, jsonify, abort, make_response
+from flask_cors import CORS, cross_origin
 from flask_restful import Api, Resource, reqparse, fields, marshal
 
 app = Flask(__name__, static_url_path="")
+CORS(app)
 api = Api(app)
 
 def save():
@@ -64,9 +66,6 @@ def train():
     print(m, b, r)
     save()
 
-load()
-train()
-
 class MBRAPI(Resource):
     def get(self):
         return {'mbr': mbr}
@@ -100,4 +99,6 @@ api.add_resource(XYAPI, '/xy/', endpoint='xy')
 api.add_resource(AllAPI, '/all/', endpoint='all')
 
 if __name__ == '__main__':
+    load()
+    train()
     app.run(debug=True)
